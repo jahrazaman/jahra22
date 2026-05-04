@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jahra Zaman | Portfolio</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --bg: #ffffff;
+    --text: #1e293b;
+    --card: #ffffff;
+}
+
+.dark {
+    --bg: #0f172a;
+    --text: #e2e8f0;
+    --card: #1e293b;
+}
+
+body {
+    margin:0;
+    font-family:'Inter',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    transition:0.3s;
+}
+
+/* NAV */
+nav {
+    position: sticky;
+    top: 0;
+    background: var(--card);
+    padding: 15px 30px;
+    display:flex;
+    justify-content:space-between;
+    box-shadow:0 5px 15px rgba(0,0,0,0.05);
+    z-index:1000;
+}
+
+nav a {
+    text-decoration:none;
+    margin:0 10px;
+    color:var(--text);
+}
+
+nav button {
+    border:none;
+    background:none;
+    cursor:pointer;
+}
+
+/* HERO */
+header {
+    text-align:center;
+    padding:80px 20px;
+}
+
+.profile {
+    width:140px;
+    height:140px;
+    border-radius:50%;
+    object-fit:cover;
+    margin-bottom:20px;
+    border:4px solid #0ea5e9;
+    transition:0.3s;
+}
+
+.profile:hover {
+    transform:scale(1.05);
+    box-shadow:0 0 25px #0ea5e9;
+}
+
+.typing {
+    color:#0ea5e9;
+}
+
+/* CONTAINER */
+.container {
+    max-width:1100px;
+    margin:auto;
+    padding:20px;
+}
+
+section {
+    margin:60px 0;
+}
+
+/* CARD */
+.card {
+    background:var(--card);
+    padding:20px;
+    border-radius:10px;
+    margin-bottom:20px;
+    opacity:0;
+    transform:translateY(40px);
+    transition:0.5s;
+}
+
+.card.show {
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* PROJECTS */
+.projects {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.project img {
+    width:100%;
+    border-radius:10px;
+}
+
+/* BUTTON */
+.btn {
+    display:inline-block;
+    margin-top:10px;
+    padding:8px 15px;
+    background:#0ea5e9;
+    color:white;
+    border-radius:20px;
+    text-decoration:none;
+}
+
+/* FOOTER */
+footer {
+    text-align:center;
+    padding:20px;
+}
+
+/* CANVAS */
+canvas {
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:-1;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="bg"></canvas>
+
+<!-- NAVBAR -->
+<nav>
+    <strong>Jahra</strong>
+    <div>
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+        <button onclick="toggleTheme()">🌙</button>
+    </div>
+</nav>
+
+<!-- HERO -->
+<header>
+    <img src="myphoto.jpeg" class="profile">
+    <h1>Jahra Zaman</h1>
+    <p>I am a <span class="typing"></span></p>
+    <a href="cv.pdf" download class="btn">Download CV</a>
+</header>
+
+<div class="container">
+
+<section id="about">
+    <h2>About Me</h2>
+    <div class="card">
+        I am a passionate CSE student focused on Flutter development and Machine Learning.
+        I enjoy building real-world applications and continuously improving my skills.
+    </div>
+</section>
+
+<section id="projects">
+    <h2>Projects</h2>
+
+    <div class="projects">
+
+        <div class="card project">
+            <img src="https://via.placeholder.com/300">
+            <h3>Library Management App</h3>
+            <p>Flutter app with login, borrow/return system.</p>
+            <a href="#" class="btn">View</a>
+        </div>
+
+        <div class="card project">
+            <img src="https://via.placeholder.com/300">
+            <h3>No-Spend Tracker</h3>
+            <p>Track daily expenses and savings.</p>
+            <a href="#" class="btn">View</a>
+        </div>
+
+    </div>
+</section>
+
+<section id="contact">
+    <h2>Contact</h2>
+    <div class="card">
+        Email: jahrarafa645.com <br>
+        GitHub: https://github.com/jahrarafa
+    </div>
+</section>
+
+</div>
+
+<footer>
+    © 2026 Jahra Zaman
+</footer>
+
+<script>
+// THEME
+function toggleTheme(){
+    document.body.classList.toggle("dark");
+}
+
+// TYPING
+const words=["Flutter Developer","ML Enthusiast","CSE Student"];
+let i=0,j=0,text="",del=false;
+
+function type(){
+    text=words[i];
+    document.querySelector(".typing").textContent=text.substring(0,j);
+
+    if(!del && j<text.length) j++;
+    else if(del && j>0) j--;
+    else{
+        del=!del;
+        if(!del) i=(i+1)%words.length;
+    }
+    setTimeout(type,100);
+}
+type();
+
+// SCROLL
+const cards=document.querySelectorAll(".card");
+window.addEventListener("scroll",()=>{
+    cards.forEach(c=>{
+        if(c.getBoundingClientRect().top<window.innerHeight-100){
+            c.classList.add("show");
+        }
+    });
+});
+
+// PARTICLES
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+for(let i=0;i<60;i++){
+    particles.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        r:Math.random()*2,
+        dx:Math.random()-0.5,
+        dy:Math.random()-0.5
+    });
+}
+
+function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p=>{
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle="#0ea5e9";
+        ctx.fill();
+
+        p.x+=p.dx;
+        p.y+=p.dy;
+    });
+    requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+</body>
+</html>
